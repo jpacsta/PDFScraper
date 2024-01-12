@@ -14,7 +14,6 @@ csv_file_path = "C:/Users/JoseAcosta/Desktop/Scraper/Dump.csv"
 table ={'CompID':Comps,
     'Pole#':Poles,
     'NJUNS#':NJUNS,
-
     }
 
     
