@@ -2,6 +2,7 @@
 import re
 
 # Library imports
+import pdb
 import pandas as pd
 from tabulate import tabulate
 from PyPDF2 import PdfReader
@@ -14,10 +15,10 @@ class CONSTANTS:
 
 class PDFScraper():
     csv_path = "C:/Users/JoseAcosta/Desktop/Scraper/Dump.csv"
-    csv_reader = PdfReader("C:/Users/JoseAcosta/Desktop/T2_HUB_SE2 Work Locations/2238328 - All Work LocationsDONE.pdf")
 
     @classmethod
-    def run(cls, export = False):
+    def run(cls, file, export = False):
+        cls.csv_reader = PdfReader(file)
         comps = cls.get_comps()
         poles = cls.get_poles()
         njuns = cls.get_njuns()
@@ -34,6 +35,8 @@ class PDFScraper():
         if export:
             df.to_csv(cls.csv_file_path)
 
+        return df
+
     @classmethod
     def for_each_page(cls, handle, pattern):
         page_index = 0
@@ -43,6 +46,7 @@ class PDFScraper():
             page_pdf = page.extract_text()
             page_search_results = re.finditer(pattern, page_pdf)
             results += handle(page_pdf, page_search_results)
+            page_index += 1
 
         return results
 
@@ -73,6 +77,7 @@ class PDFScraper():
             # You have to specify what characters you want to extract
             CompID = re.sub('\D', '', result_line[15:98])
             page_data.append("'" + CompID)
+        return page_data
 
     @classmethod
     def get_njuns(cls):
@@ -110,7 +115,7 @@ class PDFScraper():
     def get_poles(cls):
         return cls.for_each_page(
             cls.search_page_for_poles,
-            CONSTANTS.SEARCH_PATTERNS.POLES,
+            CONSTANTS.SEARCH_PATTERNS.POLE_NM,
         )
 
     @classmethod

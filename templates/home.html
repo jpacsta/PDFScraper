@@ -1,0 +1,8 @@
+{{ data | safe}}
+
+<form method="post" action="/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>file</label>
+    <input name="file" type="file">
+    <button type="submit">submit"</button>
+</form>
